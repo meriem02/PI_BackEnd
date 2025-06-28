@@ -38,6 +38,12 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_SECRET_TOKEN }}
 
+      - name: Check Docker version
+        run: docker --version
+
+      - name: List files in ./pi
+        run: ls -la ./pi
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
