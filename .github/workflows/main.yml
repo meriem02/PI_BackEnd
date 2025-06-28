@@ -1,8 +1,8 @@
-name: Java CI with Maven, Docker Hub and Nexus
+name: Java CI with Maven
 
 on:
   push:
-    branches: [ "main", "meriemBH" ]
+    branches: [ "Zied" ]
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -20,47 +20,37 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Cache Maven dependencies
+      - name: Cache SonarCloud packages
         uses: actions/cache@v3
         with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
 
-      - name: Build and SonarCloud Scan
-        run: mvn clean verify sonar:sonar -Dsonar.projectKey=ziedtuihri_PI_BackEnd -Dsonar.organization=ziedtuihri -DskipTests
-        working-directory: ./pi
-        env:
-          SONAR_TOKEN: ${{ secrets.SONARCLOUD_SECRET_TOKEN }}
-
-      - name: Setup Maven settings.xml with Nexus credentials
-        run: |
-          mkdir -p ~/.m2
-          cat > ~/.m2/settings.xml <<EOF
-          <settings>
-            <servers>
-              <server>
-                <id>nexus</id>
-                <username>${{ secrets.NEXUS_USERNAME }}</username>
-                <password>${{ secrets.NEXUS_PASSWORD }}</password>
-              </server>
-            </servers>
-          </settings>
-          EOF
-
-      - name: Deploy JAR to Nexus
-        run: mvn deploy -DskipTests
+      - name:  Build JAR with Maven
+        run: mvn clean package -DskipTests
         working-directory: ./pi
 
-      - name: Log in to Docker Hub
+      - name: List target directory
+        run: ls -l ./pi/target
+
+
+
+
+      - name: 🐳 Log in to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+
+
+      - name: 🐳 Log in to Docker (Nexus)
+        run: echo "${{ secrets.NEXUS_PASSWORD }}" | docker login ebc0-102-104-219-38.ngrok-free.app --username ${{ secrets.NEXUS_USERNAME }} --password-stdin
 
       - name: Build Docker image
-        run: docker build -t meriem01/pi-backend:latest ./pi
+        run: docker build -t ebc0-102-104-219-38.ngrok-free.app/repository/docker-hosted/pi-app:latest .
+        working-directory: ./pi
 
-      - name: Push Docker image to Docker Hub
-        run: docker push meriem01/pi-backend:latest
+      - name: Push Docker image to Nexus
+        run: docker push ebc0-102-104-219-38.ngrok-free.app/repository/docker-hosted/pi-app:latest
+

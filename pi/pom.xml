@@ -31,22 +31,6 @@
 		<sonar.organization>ziedtuihri</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
-
-	<distributionManagement>
-		<repository>
-			<id>nexus</id>
-			<name>Nexus Release Repository</name>
-			<url>https://0b6e-41-226-25-4.ngrok-free.app/repository/maven-releases/</url>
-		</repository>
-		<snapshotRepository>
-			<id>nexus</id>
-			<name>Nexus Snapshot Repository</name>
-			<url>https://0b6e-41-226-25-4.ngrok-free.app/repository/maven-snapshots/</url>
-		</snapshotRepository>
-	</distributionManagement>
-
-
-
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -82,16 +66,12 @@
 			<version>2.3.0</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<!-- autres dépendances -->
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -139,6 +119,7 @@
 	</dependencies>
 	<build>
 		<plugins>
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
