@@ -1,4 +1,4 @@
-name: Java CI with Maven, Docker Hub and Nexus
+name: Java CI with Maven and Docker Hub
 
 on:
   push:
@@ -33,23 +33,6 @@ jobs:
         working-directory: ./pi
         env:
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_SECRET_TOKEN }}
-
-      - name: Setup Maven settings.xml with Nexus credentials
-        run: |
-          mkdir -p ~/.m2
-          echo '<settings>
-            <servers>
-              <server>
-                <id>nexus</id>
-                <username>'"${{ secrets.NEXUS_USERNAME }}"'</username>
-                <password>'"${{ secrets.NEXUS_PASSWORD }}"'</password>
-              </server>
-            </servers>
-          </settings>' > ~/.m2/settings.xml
-
-      - name: Deploy JAR to Nexus
-        run: mvn deploy -DskipTests
-        working-directory: ./pi
 
       - name: Check Docker version
         run: docker --version
