@@ -70,7 +70,6 @@
 			<artifactId>mysql-connector-j</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		<!-- autres dépendances -->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
