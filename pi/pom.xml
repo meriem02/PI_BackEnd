@@ -35,9 +35,11 @@
 	<distributionManagement>
 		<repository>
 			<id>nexus</id>
-			<url>http://localhost:8081/repository/maven-releases/</url>
+			<name>Nexus Release Repo</name>
+			<url>https://0b6e-41-226-25-4.ngrok-free.app/repository/maven-releases/</url>
 		</repository>
 	</distributionManagement>
+
 
 	<dependencies>
 		<dependency>
