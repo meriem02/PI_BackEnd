@@ -50,8 +50,8 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME}}
           password: ${{ secrets.DOCKER_PASSWORD}}
 
-      - name: 🐳 Log in to Docker (Nexus via Ngrok)
-        run: echo "${{ secrets.NEXUS_PASSWORD }}" | docker login e20f-196-224-131-181.ngrok-free.app --username ${{ secrets.NEXUS_USERNAME }} --password-stdin
+      - name: 🐳 Log in to Docker (Nexus)
+        run: echo "${{ secrets.NEXUS_PASSWORD }}" | docker login ebc0-102-104-219-38.ngrok-free.app --username ${{ secrets.NEXUS_USERNAME }} --password-stdin
 
       - name: Build Docker image
         run: docker build -t ebc0-102-104-219-38.ngrok-free.app/repository/docker-hosted/pi-app:latest .
