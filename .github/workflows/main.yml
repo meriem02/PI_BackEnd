@@ -1,8 +1,8 @@
-name: Java CI with Maven and Docker Hub
+name: Java CI with Maven
 
 on:
   push:
-    branches: [ "meriemBH" ]
+    branches: [ "main" ]
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -27,29 +27,34 @@ jobs:
           key: ${{ runner.os }}-sonar
 
       - name: Build with Maven
-        run: mvn clean package -DskipTests
+        run: mvn clean
         working-directory: ./pi
 
-      - name: SonarCloud Scan
-        run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-          -Dsonar.projectKey=ziedtuihri_PI_BackEnd \
-          -Dsonar.organization=ziedtuihri
+      - name: Build and SonarCloud Scan with Maven
+        run: mvn -B verify -DskipTests org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=ziedtuihri_PI_BackEnd
         working-directory: ./pi
         env:
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_SECRET_TOKEN }}
 
-      - name: Log in to Docker Hub
+      - name: Build JAR with Maven
+        run: mvn clean package -DskipTests
+        working-directory: ./pi
+
+      - name: List target directory
+        run: ls -l ./pi/target
+
+      - name: 🐳 Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Log in to Nexus
-        run: echo "${{ secrets.NEXUS_PASSWORD }}" | docker login f41d-102-104-219-38.ngrok-free.app --username ${{ secrets.NEXUS_USERNAME }} --password-stdin
+      - name: 🐳 Log in to Docker (Nexus)
+        run: echo "${{ secrets.NEXUS_PASSWORD }}" | docker login 9773-196-224-131-181.ngrok-free.app --username ${{ secrets.NEXUS_USERNAME }} --password-stdin
 
       - name: Build Docker image
-        run: docker build -t f41d-102-104-219-38.ngrok-free.app/repository/docker-hosted/pi-app:latest .
+        run: docker build -t 9773-196-224-131-181.ngrok-free.app/repository/docker-hosted/pi-app:latest .
         working-directory: ./pi
 
-      - name: Push Docker image
-        run: docker push f41d-102-104-219-38.ngrok-free.app/repository/docker-hosted/pi-app:latest
+      - name: Push Docker image to Nexus
+        run: docker push 9773-196-224-131-181.ngrok-free.app/repository/docker-hosted/pi-app:latest
