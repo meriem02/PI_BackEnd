@@ -84,6 +84,7 @@ class ReservationServiceTest {
         assertThat(result.getId()).isEqualTo(5L);
     }
 
+
     @Test
     void testGetSalleById_WhenNotFound() {
         when(salleRepository.findById(99L)).thenReturn(Optional.empty());
