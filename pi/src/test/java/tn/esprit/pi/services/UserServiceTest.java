@@ -66,8 +66,8 @@ class UserServiceTest {
 
         User user2 = User.builder()
                 .id(2)
-                .email("marwa@example.com")
-                .firstName("Marwa")
+                .email("ahmed@example.com")
+                .firstName("Ahmed")
                 .lastName("Tissaoui")
                 .build();
 
@@ -77,7 +77,7 @@ class UserServiceTest {
 
         assertThat(users).hasSize(2);
         assertThat(users.get(0).getEmail()).isEqualTo("meriem@example.com");
-        assertThat(users.get(1).getEmail()).isEqualTo("marwa@example.com");
+        assertThat(users.get(1).getEmail()).isEqualTo("ahmed@example.com");
         verify(userRepository).findAll();
     }
 }
